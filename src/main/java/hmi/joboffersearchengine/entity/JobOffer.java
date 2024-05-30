@@ -3,16 +3,29 @@ package hmi.joboffersearchengine.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "JOBS_CRAWL_FILTER_JOBSUCHE_EN")
 public class JobOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "RID")
     private Long id;
 
+    @Column(name = "TITLE")
     private String title;
+
+    @Column(name = "RAW_JOBS_CRAWL_ID")
     private String job_id;
+
+    @Column(name = "DESCRIPTION")
     private String description;
-    private String company_desc;
+
+    @Column(name = "EMPLOYER_DESCRIPTION")
+    private String companyDescription;
+
+    @Column(name = "OCCUPATION")
     private String occupation;
+
+    @Column(name = "INSERTION_DATE")
     private String date_inserted;
 
     public Long getId() {
@@ -63,11 +76,11 @@ public class JobOffer {
         this.occupation = occupation;
     }
 
-    public String getCompany_desc() {
-        return company_desc;
+    public String getCompanyDescription() {
+        return companyDescription;
     }
 
-    public void setCompany_desc(String company_desc) {
-        this.company_desc = company_desc;
+    public void setCompanyDescription(String companyDescription) {
+        this.companyDescription = companyDescription;
     }
 }

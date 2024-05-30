@@ -17,9 +17,9 @@ public class JobOfferService {
         return repository.findAll();
     }
 
-    public List<JobOffer> getAllJobOffersByKeyword(String keyword){
+    /*public List<JobOffer> getAllJobOffersByKeyword(String keyword){
         return repository.findByTitleContaining(keyword);
-    }
+    }*/
 
     public JobOffer getJobOfferById(Long id) {
         return repository.findById(id).orElse(null);
@@ -31,5 +31,8 @@ public class JobOfferService {
 
     public void deleteJobOffer(Long id) {
         repository.deleteById(id);
+    }
+    public List<JobOffer> searchJobOffers(String keyword) {
+        return repository.findByTitleContainingOrDescriptionContainingOrCompanyDescriptionContainingOrOccupationContaining(keyword, keyword, keyword, keyword);
     }
 }

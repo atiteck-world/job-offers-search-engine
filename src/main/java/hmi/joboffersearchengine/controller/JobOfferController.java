@@ -1,5 +1,6 @@
 package hmi.joboffersearchengine.controller;
 
+import org.springframework.ui.Model;
 import hmi.joboffersearchengine.entity.JobOffer;
 import hmi.joboffersearchengine.service.JobOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class JobOfferController {
         }
     }
 
-    @GetMapping("/search")
+    /*@GetMapping("/search")
     public ResponseEntity<JobOffer> getAllJobOffersByKeyword(@PathVariable String keyword){
         JobOffer jobOffer = (JobOffer) service.getAllJobOffersByKeyword(keyword);
         if (jobOffer != null){
@@ -39,7 +40,7 @@ public class JobOfferController {
         }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
+    }*/
 
     @PostMapping
     public ResponseEntity<JobOffer> createJobOffer(@RequestBody JobOffer jobOffer) {
@@ -50,5 +51,19 @@ public class JobOfferController {
     public ResponseEntity<Void> deleteJobOffer(@PathVariable Long id) {
         service.deleteJobOffer(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/search")
+    public String searchJobOffers(@RequestParam("keyword") String keyword, Model model) {
+        List<JobOffer> jobs = service.searchJobOffers(keyword);
+        model.addAttribute("listJobs", jobs);
+        return "index";
+    }
+
+    // For test the search endpoint with postman
+    @GetMapping("/api/search")
+    @ResponseBody
+    public List<JobOffer> searchJobsApi(@RequestParam("keyword") String keyword) {
+        return service.searchJobOffers(keyword);
     }
 }

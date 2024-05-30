@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface JobOfferRepository extends JpaRepository<JobOffer, Long> {
-    List<JobOffer> findByTitleContaining(String keyword);
+    List<JobOffer> findByTitleContainingOrDescriptionContainingOrCompanyDescriptionContainingOrOccupationContaining(String title, String description, String companyDescription, String occupation);
 }
