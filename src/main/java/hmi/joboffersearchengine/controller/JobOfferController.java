@@ -1,5 +1,7 @@
 package hmi.joboffersearchengine.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import hmi.joboffersearchengine.entity.JobOffer;
 import hmi.joboffersearchengine.service.JobOfferService;
@@ -10,14 +12,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/job-offers")
+@Controller
+@RequestMapping("/")
 public class JobOfferController {
 
     @Autowired
     private JobOfferService service;
 
     @GetMapping
+    public String index(Model model) {
+        List<JobOffer> randomJobs = service.getRandomJobs(5);
+        model.addAttribute("randomJobs", randomJobs);
+        return "index";
+    }
+
+    @GetMapping("/allJobs")
     public ResponseEntity<List<JobOffer>> getAllJobOffers() {
         return new ResponseEntity<>(service.getAllJobOffers(), HttpStatus.OK);
     }
@@ -61,9 +70,21 @@ public class JobOfferController {
     }
 
     // For test the search endpoint with postman
-    @GetMapping("/api/search")
+    /*@GetMapping("/api/search")
     @ResponseBody
     public List<JobOffer> searchJobsApi(@RequestParam("keyword") String keyword) {
         return service.searchJobOffers(keyword);
+    }*/
+
+    @GetMapping("/searchs")
+    public String searchJobOffer(@RequestParam("keyword") String keyword,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  Model model) {
+        int pageSize = 5; // Number of job offers per page
+        Page<JobOffer> jobPage = service.searchJobOffer(keyword, page, pageSize);
+        model.addAttribute("listJobs", jobPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", jobPage.getTotalPages());
+        return "index";
     }
 }
